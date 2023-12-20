@@ -23,13 +23,15 @@ function Order() {
 
     //lấy tất cả sản phẩm của người dùng hiện tại
     currentOrders = [];
-    for (let i = 0; i < orders.length; i++) {
-        if (orders[i].listproduct[0].userId === user._id) {
-            currentOrders.push(orders[i]);
+    if (orders) {
+        for (let i = 0; i < orders.length; i++) {
+            if (orders[i].listproduct[0].userId === user._id) {
+                currentOrders.push(orders[i]);
+            }
         }
-    }
-    if (listOrders === '') {
-        currentList = currentOrders;
+        if (listOrders === '') {
+            currentList = currentOrders;
+        }
     }
 
     //xử lý hiển thị list theo danh mục
@@ -82,6 +84,19 @@ function Order() {
             }
         }
     };
+
+    //format date
+    function formatDate(value) {
+        const date = new Date(value);
+        const day = date.getUTCDate();
+        const month = date.getUTCMonth() + 1;
+        const year = date.getUTCFullYear();
+
+        // Định dạng lại chuỗi ngày tháng năm
+        const formattedDate = `${day < 10 ? '0' + day : day}-${month < 10 ? '0' + month : month}-${year}`;
+
+        return formattedDate;
+    }
 
     useEffect(() => {}, [listOrders]);
 
@@ -146,7 +161,7 @@ function Order() {
                                             <img src={item.avatar} alt="" />
                                             <div className="order-item-body-des">
                                                 <p>{item.description}</p>
-                                                <p>x{item.count}</p>
+                                                <p style={{ color: 'green' }}>x{item.count}</p>
                                             </div>
                                             <div className="price">
                                                 <span>
@@ -160,17 +175,34 @@ function Order() {
                                     );
                                 })}
                                 <div className="order-item-footer">
-                                    <p className="order-item-footer-row-1">
-                                        Thành tiền:{' '}
-                                        <span>
+                                    <div className="box">
+                                        <p className="order-item-footer-row-1">
+                                            Thành tiền:{' '}
                                             <span>
-                                                {Intl.NumberFormat('de-DE', {
-                                                    style: 'currency',
-                                                    currency: 'VND',
-                                                }).format(order.total)}
+                                                <span>
+                                                    {Intl.NumberFormat('de-DE', {
+                                                        style: 'currency',
+                                                        currency: 'VND',
+                                                    }).format(order.total)}
+                                                </span>
                                             </span>
-                                        </span>
-                                    </p>
+                                        </p>
+                                        <p className="order-item-footer-row-1">
+                                            Mã đơn hàng: <p>{order._id}</p>
+                                        </p>
+                                        <p className="order-item-footer-row-1">
+                                            Địa chỉ: <p>{order.user.address}</p>
+                                        </p>
+                                        <p className="order-item-footer-row-1">
+                                            Số điện thoại: <p>{order.user.phone}</p>
+                                        </p>
+                                        <p className="order-item-footer-row-1">
+                                            Ngày đặt hàng: <p>{formatDate(order.dateCreate)}</p>
+                                        </p>
+                                        <p className="order-item-footer-row-1">
+                                            Ngày giao dự kiến: <p>{formatDate(order.dateEnd)}</p>
+                                        </p>
+                                    </div>
                                     <div className="order-item-footer-row-2">
                                         <p>Quản lý bởi hệ thống Mouse Store, giao hàng sớm nhất 3 đến 5 ngày</p>
                                         <div className="order-item-footer-row-2-btn">

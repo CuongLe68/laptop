@@ -2,6 +2,7 @@ const User = require('../models/User');
 const Product = require('../models/Product');
 const Cart = require('../models/Cart');
 const Orders = require('../models/Orders');
+const Comments = require('../models/Comments');
 
 const userControllers = {
     //get all users admin
@@ -52,25 +53,24 @@ const userControllers = {
             const newProduct = await new Product({
                 name: req.body.name,
                 product: {
-                    avatar: req.body.avatar,
-                    description: req.body.description,
-                    number: req.body.number,
-                    price: req.body.price,
-                    cost: req.body.cost,
-                    percent: req.body.percent,
-                    cpu: req.body.cpu,
-                    hardrive: req.body.hardrive,
-                    muxSwitch: req.body.muxSwitch,
-                    creen: req.body.creen,
-                    webcam: req.body.webcam,
-                    connection: req.body.connection,
-                    weight: req.body.weight,
-                    pin: req.body.pin,
-                    operetingSystem: req.body.operetingSystem,
+                    avatar: req.body.product.avatar,
+                    description: req.body.product.description,
+                    number: req.body.product.number,
+                    price: req.body.product.price,
+                    cost: req.body.product.cost,
+                    percent: req.body.product.percent,
+                    cpu: req.body.product.cpu,
+                    hardrive: req.body.product.hardrive,
+                    muxSwitch: req.body.product.muxSwitch,
+                    creen: req.body.product.creen,
+                    webcam: req.body.product.webcam,
+                    connection: req.body.product.connection,
+                    weight: req.body.product.weight,
+                    pin: req.body.product.pin,
+                    operetingSystem: req.body.product.operetingSystem,
                 },
             });
-
-            const product = await newProduct.save();
+            await newProduct.save();
             const listProduct = await Product.find();
             res.status(200).json(listProduct);
         } catch (error) {
@@ -146,25 +146,24 @@ const userControllers = {
     //create new order
     createNewOrder: async (req, res) => {
         try {
-            //Đang lỗi khi tiến hành đặt hàng thành công thì số lượng sản phẩm trong database chưa giảm
-            // let arrListProducts = [];
-            // //lấy id và số lượng của từng sản phẩm trong list đặt hàng ra
-            // req.body.listproduct.map((item) => {
-            //     arrListProducts.push({
-            //         productId: item.productId,
-            //         count: item.count,
-            //     });
-            // });
+            //lấy id và số lượng của từng sản phẩm trong list đặt hàng ra
+            let arrListProducts = [];
+            req.body.listproduct.map((item) => {
+                arrListProducts.push({
+                    productId: item.productId,
+                    count: item.count,
+                });
+            });
 
-            // //Cập nhật lại số lượng sản phẩm trong kho
-            // arrListProducts.map((item) => {
-            //     const product = Product.findById(item.productId);
-            //     product._doc.listproduct.number = product._doc.listproduct.number - req.body.count;
-            //     const { ...other } = { ...product._doc };
-            //     // await Product.findByIdAndUpdate(req.body.productId, { ...other });
-            // });
+            //Cập nhật lại số lượng sản phẩm
+            for (const product of arrListProducts) {
+                let id = product.productId;
+                let count = product.count;
+                const result = await Product.updateOne({ _id: id }, { $inc: { 'product.number': -count } });
+            }
 
             const newOrder = await new Orders({
+                user: req.body.user,
                 listproduct: req.body.listproduct,
                 paymentMethods: req.body.paymentMethods,
                 total: req.body.total,
@@ -172,9 +171,11 @@ const userControllers = {
                 isPayment: req.body.isPayment,
                 istransported: req.body.istransported,
                 isSuccess: req.body.isSuccess,
+                dateCreate: req.body.dateCreate,
+                dateEnd: req.body.dateEnd,
             });
 
-            const order = await newOrder.save();
+            await newOrder.save();
             const allOrders = await Orders.find();
 
             await res.status(200).json(allOrders);
@@ -190,6 +191,83 @@ const userControllers = {
             res.status(200).json(allOrders);
         } catch (error) {
             res.status(500).json('Lấy tất cả đơn hàng thất bại');
+        }
+    },
+
+    //update Order
+    updateOrders: async (req, res) => {
+        try {
+            await Orders.findByIdAndUpdate(req.params.id, req.body.body);
+            const listProduct = await Orders.find();
+            res.status(200).json(listProduct);
+        } catch (error) {
+            res.status(500).json('Cập nhật thông tin thất bại');
+        }
+    },
+
+    //delete order from cart
+    deleteOrder: async (req, res) => {
+        try {
+            await Orders.findByIdAndDelete(req.params.id);
+            const newOrders = await Orders.find();
+
+            res.status(200).json(newOrders);
+        } catch (error) {
+            res.status(500).json('Xóa thất bại');
+        }
+    },
+
+    //create comment
+    createComment: async (req, res) => {
+        try {
+            const newComment = await new Comments({
+                user: req.body.user,
+                rating: req.body.rating,
+                comment: req.body.comment,
+                reComment: req.body.reComment,
+                dateComment: req.body.dateComment,
+                dateReComment: req.body.dateReComment,
+                currentProduct: req.body.currentProduct,
+            });
+
+            await newComment.save();
+            const allComments = await Comments.find();
+
+            res.status(200).json(allComments);
+        } catch (error) {
+            res.status(500).json('Bình luận thất bại');
+        }
+    },
+
+    //get All Comment
+    getAllComment: async (req, res) => {
+        try {
+            const allComment = await Comments.find();
+            res.status(200).json(allComment);
+        } catch (error) {
+            res.status(500).json('Lấy bình luận thất bại');
+        }
+    },
+
+    updateComment: async (req, res) => {
+        try {
+            await Comments.findByIdAndUpdate(req.params.id, req.body.body);
+
+            const listComments = await Comments.find();
+            res.status(200).json(listComments);
+        } catch (error) {
+            res.status(500).json('Phản hồi bình luận thất bại');
+        }
+    },
+
+    deleteComment: async (req, res) => {
+        try {
+            await Comments.findByIdAndDelete(req.params.id);
+
+            const listComments = await Comments.find();
+            res.status(200).json(listComments);
+        } catch (error) {
+            res.status(500).json('Xoá bình luận thất bại');
         }
     },
 };

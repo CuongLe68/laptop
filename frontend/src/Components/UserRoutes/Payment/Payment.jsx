@@ -17,7 +17,7 @@ function Payment() {
     const user = useSelector((state) => state.auth.login?.currentUser);
     const carts = useSelector((state) => state.auth.login?.allCarts); //lấy tất cả sản phẩm của tất cả users
     const [total, setTotal] = useState(price); // tổng tiền của đơn hàng chưa tính phí vận chuyển
-    const [paymentMethods, setPaymentMethods] = useState('Thanh toán khi nhận hàng'); //lựa chọn phương thức thanh toán
+    const [paymentMethods, setPaymentMethods] = useState('offline'); //lựa chọn phương thức thanh toán
     const [code, setCode] = useState(''); //mã giao dịch khi thanh toán bằng chuyển khoản
 
     const dispatch = useDispatch();
@@ -67,13 +67,12 @@ function Payment() {
 
     //Kiểm tra phương thức thanh toán
     const handleCheckPayment = (e) => {
-        if (e === 'off') {
-            setPaymentMethods('Thanh toán khi nhận hàng');
+        setPaymentMethods(e);
+        if (e === 'offline') {
             document.querySelector('.form-payment').style.display = 'none';
             document.querySelector('.options-onl').checked = false;
             document.querySelector('.options-off').setAttribute('checked', '');
-        } else if (e === 'onl') {
-            setPaymentMethods('Chuyển khoản');
+        } else if (e === 'online') {
             document.querySelector('.form-payment').style.display = 'block';
             document.querySelector('.options-off').checked = false;
             document.querySelector('.options-onl').setAttribute('checked', '');
@@ -90,7 +89,20 @@ function Payment() {
         if (arrCarts.length === 0) {
             alert('Bạn phải chọn ít nhất 1 sản phẩm để đặt hàng!');
         } else {
+            let currentDate = new Date();
+            let DATE_CREATE = new Date(currentDate.getTime() + 7 * 60 * 60 * 1000);
+
+            // Tạo một đối tượng Date từ chuỗi thời gian UTC
+            let utcDate = new Date(DATE_CREATE);
+
+            // Thêm 3 ngày (3 * 24 giờ * 60 phút * 60 giây * 1000 mili giây)
+            let threeDaysInMilliseconds = 3 * 24 * 60 * 60 * 1000;
+
+            // Tính thời gian mới sau khi thêm 3 ngày
+            let DATE_END = new Date(utcDate.getTime() + threeDaysInMilliseconds);
+
             const newOrders = {
+                user: user,
                 listproduct: arrCarts,
                 paymentMethods: paymentMethods,
                 total: total + 30000,
@@ -98,9 +110,11 @@ function Payment() {
                 isPayment: false,
                 istransported: false,
                 isSuccess: false,
+                dateCreate: DATE_CREATE,
+                dateEnd: DATE_END,
             };
 
-            if (paymentMethods === 'Thanh toán khi nhận hàng') {
+            if (paymentMethods === 'offline') {
                 createNewOrder(dispatch, navigate, newOrders, axiosJWT);
             } else {
                 if (code === '') {
@@ -202,7 +216,7 @@ function Payment() {
                                     className="options-off"
                                     type="radio"
                                     defaultChecked
-                                    onChange={(e) => handleCheckPayment('off')}
+                                    onChange={(e) => handleCheckPayment('offline')}
                                 />
                                 Thanh toán khi nhận hàng
                             </div>
@@ -210,7 +224,7 @@ function Payment() {
                                 <input
                                     className="options-onl"
                                     type="radio"
-                                    onChange={(e) => handleCheckPayment('onl')}
+                                    onChange={(e) => handleCheckPayment('online')}
                                 />
                                 Chuyển khoản
                             </div>

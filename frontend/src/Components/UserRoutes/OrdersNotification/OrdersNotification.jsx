@@ -9,7 +9,7 @@ function OrdersNotification() {
             <NavBar />
             <div className="ordersNotification-wrapper">
                 <User />
-                <div className="ordersNotification-right">Thông báo</div>
+                <div className="ordersNotification-right">Không có thông báo mới</div>
             </div>
             <Footer />
         </div>

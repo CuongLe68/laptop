@@ -123,10 +123,10 @@ const NavBar = () => {
                         </>
                     ) : (
                         <>
-                            <div className="user-item">
+                            <Link className="user-item" to="/tai-khoan/thong-bao">
                                 <FontAwesomeIcon icon={faBell} />
                                 Thông báo
-                            </div>
+                            </Link>
                             <div className="user-item user-profile">
                                 <img src={userLogo} alt="" />
                                 <span>{user.fullname}</span>
@@ -151,23 +151,23 @@ const NavBar = () => {
                     <FontAwesomeIcon icon={faHome} />
                     trang chủ
                 </div>
-                <Link className="menu-item">
+                <Link className="menu-item" to="/gioi-thieu">
                     <FontAwesomeIcon icon={faArrowAltCircleRight} />
                     giới thiệu
                 </Link>
-                <Link className="menu-item">
+                <Link className="menu-item" to="/">
                     <FontAwesomeIcon icon={faLaptop} />
                     sản phẩm
                 </Link>
-                <Link className="menu-item">
+                <Link className="menu-item" to="/tin-tuc">
                     <FontAwesomeIcon icon={faBell} />
                     tin tức
                 </Link>
-                <Link className="menu-item">
+                <Link className="menu-item" to="/ho-tro">
                     <FontAwesomeIcon icon={faQuestionCircle} />
                     hỗ trợ 24/7
                 </Link>
-                <Link className="menu-item">
+                <Link className="menu-item" to="/tuyen-dung">
                     <FontAwesomeIcon icon={faPeopleGroup} />
                     tuyển dụng
                 </Link>

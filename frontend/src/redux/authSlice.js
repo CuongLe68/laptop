@@ -109,6 +109,19 @@ const authSlice = createSlice({
             state.login.isFetching = false;
             state.login.error = true;
         },
+
+        //update carts
+        updateProductCartsStart: (state) => {
+            state.login.isFetching = true;
+        },
+        updateProductCartsSuccess: (state, action) => {
+            state.login.isFetching = false;
+            state.login.allCarts = action.payload;
+        },
+        updateProductCartsFailed: (state) => {
+            state.login.isFetching = false;
+            state.login.error = true;
+        },
     },
 });
 
@@ -140,6 +153,10 @@ export const {
     deleteProductCartsStart,
     deleteProductCartsSuccess,
     deleteProductCartsFailed,
+
+    updateProductCartsStart,
+    updateProductCartsSuccess,
+    updateProductCartsFailed,
 } = authSlice.actions;
 
 export default authSlice.reducer;

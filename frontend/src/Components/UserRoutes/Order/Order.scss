@@ -122,15 +122,25 @@
                 .order-item-footer {
                     width: 100%;
 
-                    .order-item-footer-row-1 {
-                        padding: 2rem 0 1rem;
-                        text-align: right;
+                    .box {
                         width: 100%;
-                        font-size: 1.5rem;
 
-                        span {
-                            font-size: 2rem;
-                            color: var(--background-lightorange);
+                        .order-item-footer-row-1 {
+                            margin-left: auto;
+                            padding: 2rem 0 1rem;
+                            display: flex;
+                            justify-content: space-between;
+                            width: 40%;
+                            font-size: 1.5rem;
+
+                            span {
+                                font-size: 2rem;
+                                color: var(--background-lightorange);
+                            }
+
+                            p {
+                                font-size: 1.5rem;
+                            }
                         }
                     }
 

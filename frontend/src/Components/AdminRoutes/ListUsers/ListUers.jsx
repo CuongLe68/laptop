@@ -9,7 +9,6 @@ import Admin from '../../Admin/Admin';
 
 function ListUsers() {
     const user = useSelector((state) => state.auth.login?.currentUser);
-    const msg = useSelector((state) => state.users?.msg);
 
     const [newfullname, setNewFullname] = useState('');
     const [newEmail, setNewEmail] = useState('');
@@ -68,14 +67,20 @@ function ListUsers() {
             username: newUsername,
         };
 
+        // Kiểm tra định dạng email
+        const isValidEmail = /\S+@\S+\.\S+/;
+
         if (newfullname === '' && newEmail === '' && newPhone === '' && newAddress === '' && newUsername === '') {
             alert('Lỗi: Không được để trống thông tin');
         } else if (newfullname.length < 5) {
             alert('Lỗi: Độ tên phải từ 5 - 30 ký tự');
+        } else if (!isValidEmail.test(newEmail)) {
+            alert('Lỗi: Email không đúng định dạng');
         } else if (newEmail.length < 10) {
             alert('Lỗi: Độ dài email từ 10 - 40 ký tự');
-        } else if (newPhone.length < 10 || newPhone.length > 12) {
+        } else if (newPhone < 0 || newPhone.length < 10 || newPhone.length > 12) {
             alert('Lỗi: số điện thoại không hợp lệ');
+            setNewPhone('');
         } else if (newAddress.length < 1) {
             alert('Lỗi: Bạn chưa nhập địa chỉ ');
         } else if (newUsername < 7) {
@@ -146,7 +151,6 @@ function ListUsers() {
             <div className="listusers-container">
                 <Admin />
                 <div className="listusers-header">Danh sách người dùng</div>
-                <p style={{ fontSize: '1.6rem' }}>{msg}</p>
                 <table>
                     <tr>
                         <th>Tên người dùng</th>

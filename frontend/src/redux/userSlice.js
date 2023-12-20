@@ -7,8 +7,10 @@ const userSlice = createSlice({
             allUsers: null,
             allProducts: null,
             allOrders: null,
+            allListOrders: null,
             currentProduct: null,
             searchResults: null,
+            allComments: 123,
             isFetching: false,
             error: false,
         },
@@ -137,7 +139,7 @@ const userSlice = createSlice({
             state.users.error = false;
         },
 
-        //get all Orders
+        //create Order
         createOrdersStart: (state) => {
             state.users.isFetching = true;
         },
@@ -146,6 +148,105 @@ const userSlice = createSlice({
             state.users.allOrders = action.payload;
         },
         createOrdersFailed: (state) => {
+            state.users.isFetching = false;
+            state.users.error = true;
+        },
+
+        //get all Order
+        getAllOrdersStart: (state) => {
+            state.users.isFetching = true;
+        },
+        getAllOrdersSuccess: (state, action) => {
+            state.users.isFetching = false;
+            state.users.allListOrders = action.payload;
+        },
+        getAllOrdersFailed: (state) => {
+            state.users.isFetching = false;
+            state.users.error = true;
+        },
+
+        //delete order
+        deleteOrderStart: (state) => {
+            state.users.isFetching = true;
+        },
+        deleteOrderSuccess: (state, action) => {
+            state.users.isFetching = false;
+            state.users.allListOrders = action.payload;
+            state.msg = 'Xóa đơn hàng thành công';
+        },
+        deleteOrderFailed: (state, action) => {
+            state.users.isFetching = false;
+            state.users.error = true;
+            state.msg = action.payload;
+        },
+
+        //delete order
+        updateOrderStart: (state) => {
+            state.users.isFetching = true;
+        },
+        updateOrderSuccess: (state, action) => {
+            state.users.isFetching = false;
+            state.users.allListOrders = action.payload;
+            state.msg = 'Cập nhật đơn hàng thành công';
+        },
+        updateOrderFailed: (state, action) => {
+            state.users.isFetching = false;
+            state.users.error = true;
+            state.msg = action.payload;
+        },
+
+        //create comment
+        createCommentStart: (state) => {
+            state.users.isFetching = true;
+        },
+        createCommentSuccess: (state, acction) => {
+            state.users.isFetching = false;
+            state.users.allComments = acction.payload;
+            state.users.error = false;
+        },
+        createCommentFailed: (state) => {
+            state.users.isFetching = false;
+            state.users.error = true;
+        },
+
+        //get all comment
+        getAllCommentStart: (state) => {
+            state.users.isFetching = true;
+        },
+        getAllCommentSuccess: (state, acction) => {
+            state.users.isFetching = false;
+            state.users.allComments = acction.payload;
+            state.users.error = false;
+        },
+        getAllCommentFailed: (state) => {
+            state.users.isFetching = false;
+            state.users.error = true;
+        },
+
+        //update user
+        updateCommentStart: (state) => {
+            state.users.isFetching = true;
+        },
+        updateCommentSuccess: (state, action) => {
+            state.users.isFetching = false;
+            state.users.allComments = action.payload;
+            state.users.error = false;
+        },
+        updateCommentFailed: (state) => {
+            state.users.isFetching = false;
+            state.users.error = true;
+        },
+
+        //delete comment
+        deleteCommentStart: (state) => {
+            state.users.isFetching = true;
+        },
+        deleteCommentSuccess: (state, action) => {
+            state.users.isFetching = false;
+            state.users.allComments = action.payload;
+            state.users.error = false;
+        },
+        deleteCommentFailed: (state) => {
             state.users.isFetching = false;
             state.users.error = true;
         },
@@ -192,6 +293,34 @@ export const {
     createOrdersStart,
     createOrdersSuccess,
     createOrdersFailed,
+
+    getAllOrdersStart,
+    getAllOrdersSuccess,
+    getAllOrdersFailed,
+
+    deleteOrderStart,
+    deleteOrderSuccess,
+    deleteOrderFailed,
+
+    updateOrderStart,
+    updateOrderSuccess,
+    updateOrderFailed,
+
+    createCommentStart,
+    createCommentSuccess,
+    createCommentFailed,
+
+    getAllCommentStart,
+    getAllCommentSuccess,
+    getAllCommentFailed,
+
+    updateCommentStart,
+    updateCommentSuccess,
+    updateCommentFailed,
+
+    deleteCommentStart,
+    deleteCommentSuccess,
+    deleteCommentFailed,
 } = userSlice.actions;
 
 export default userSlice.reducer;

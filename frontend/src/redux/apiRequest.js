@@ -21,6 +21,9 @@ import {
     deleteProductCartsFailed,
     deleteProductCartsStart,
     deleteProductCartsSuccess,
+    updateProductCartsStart,
+    updateProductCartsFailed,
+    updateProductCartsSuccess,
 } from './authSlice';
 import {
     createOrdersFailed,
@@ -30,11 +33,17 @@ import {
     createProductStart,
     createProductSuccess,
     deleteProductFailed,
+    deleteOrderFailed,
+    deleteOrderStart,
+    deleteOrderSuccess,
     deleteProductStart,
     deleteProductSuccess,
     deleteUserFailed,
     deleteUserStart,
     deleteUserSuccess,
+    getAllOrdersFailed,
+    getAllOrdersStart,
+    getAllOrdersSuccess,
     getProductFailed,
     getProductStart,
     getProductSuccess,
@@ -53,6 +62,21 @@ import {
     updateProductFailed,
     updateProductStart,
     updateProductSuccess,
+    updateOrderStart,
+    updateOrderSuccess,
+    updateOrderFailed,
+    createCommentStart,
+    createCommentFailed,
+    createCommentSuccess,
+    getAllCommentStart,
+    getAllCommentSuccess,
+    getAllCommentFailed,
+    updateCommentStart,
+    updateCommentSuccess,
+    updateCommentFailed,
+    deleteCommentStart,
+    deleteCommentSuccess,
+    deleteCommentFailed,
 } from './userSlice';
 
 const proxy = 'http://localhost:8000/v1';
@@ -274,6 +298,16 @@ export const deleteCarts = async (dispatch, id, axiosJWT) => {
     }
 };
 
+//update carts
+export const updateCarts = async (dispatch, listOrders) => {
+    dispatch(updateProductCartsStart());
+    try {
+        dispatch(updateProductCartsSuccess(listOrders));
+    } catch (error) {
+        dispatch(updateProductCartsFailed);
+    }
+};
+
 //create order
 export const createNewOrder = async (dispatch, navigate, newOrders, axiosJWT) => {
     dispatch(createOrdersStart());
@@ -284,5 +318,96 @@ export const createNewOrder = async (dispatch, navigate, newOrders, axiosJWT) =>
         navigate('/tai-khoan/don-hang');
     } catch (error) {
         dispatch(createOrdersFailed());
+    }
+};
+
+//get all orders
+export const getAllOrders = async (dispatch, axiosJWT, accessToken) => {
+    dispatch(getAllOrdersStart());
+    try {
+        const res = await axiosJWT.get(`${proxy}/user/all-orders`, {
+            headers: { token: `Bearer ${accessToken}` },
+        });
+
+        dispatch(getAllOrdersSuccess(res.data));
+    } catch (error) {
+        dispatch(getAllOrdersFailed());
+    }
+};
+
+//delete 643d2c232899340fa945d103
+export const deleteOrder = async (dispatch, id, axiosJWT) => {
+    dispatch(deleteOrderStart());
+    try {
+        const res = await axiosJWT.delete(`${proxy}/user/delete-order/` + id);
+        dispatch(deleteOrderSuccess(res.data));
+        alert('Xóa đơn hàng thành công');
+        window.location.reload();
+    } catch (error) {
+        dispatch(deleteOrderFailed());
+    }
+};
+
+//Update Orders
+export const updateOrder = async (orderId, orders, axiosJWT, dispatch) => {
+    dispatch(updateOrderStart());
+    try {
+        const res = await axiosJWT.put(`http://localhost:8000/v1/user/update-order/` + orderId, {
+            body: orders,
+        });
+        alert('Cập nhật thông tin thành công');
+        dispatch(updateOrderSuccess(res.data));
+        window.location.reload();
+    } catch (error) {
+        dispatch(updateOrderFailed(error.response.data));
+    }
+};
+
+//Create comment
+export const createComment = async (newComment, axiosJWT, dispatch) => {
+    dispatch(createCommentStart());
+    try {
+        const res = await axiosJWT.post('http://localhost:8000/v1/user/create-comment', newComment);
+        dispatch(createCommentSuccess(res.data));
+    } catch (error) {
+        dispatch(createCommentFailed());
+    }
+};
+
+//get all comment
+export const getAllComment = async (axiosJWT, dispatch) => {
+    dispatch(getAllCommentStart());
+    try {
+        const res = await axiosJWT.get('http://localhost:8000/v1/user/get-all-comment');
+        dispatch(getAllCommentSuccess(res.data));
+    } catch (error) {
+        dispatch(getAllCommentFailed());
+    }
+};
+
+//Update comment
+export const updateComment = async (id, comment, axiosJWT, dispatch) => {
+    dispatch(updateCommentStart());
+    try {
+        const res = await axiosJWT.put(`http://localhost:8000/v1/user/update-comment/` + id, {
+            body: comment,
+        });
+        alert('Phản hồi thành công');
+        dispatch(updateCommentSuccess(res.data));
+        window.location.reload();
+    } catch (error) {
+        dispatch(updateCommentFailed(error.response.data));
+    }
+};
+
+//delete 643d2c232899340fa945d103
+export const deleteComment = async (id, dispatch, axiosJWT) => {
+    dispatch(deleteCommentStart());
+    try {
+        const res = await axiosJWT.delete(`${proxy}/user/delete-comment/` + id);
+        dispatch(deleteCommentSuccess(res.data));
+        alert('Xóa bình luận thành công');
+    } catch (error) {
+        dispatch(deleteCommentFailed());
     }
 };

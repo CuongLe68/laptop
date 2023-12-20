@@ -1,15 +1,15 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { createAxios } from '../../../createInstance';
-import { deleteCarts } from '../../../redux/apiRequest';
+import { deleteCarts, updateCarts } from '../../../redux/apiRequest';
 import { loginSuccess } from '../../../redux/authSlice';
 import Footer from '../../Footer/Footer';
 import NavBar from '../../NavBar/NavBar';
 import './Cart.scss';
 import cart from '../../../../src/assets/imgs/cart.png';
 
-let listCarts = [];
+let userCarts = [];
 function Cart() {
     const user = useSelector((state) => state.auth.login?.currentUser);
     const carts = useSelector((state) => state.auth.login?.allCarts);
@@ -18,8 +18,6 @@ function Cart() {
 
     const axiosJWT = createAxios(user, dispatch, loginSuccess());
 
-    const [count, setCount] = useState();
-
     useEffect(() => {
         if (!user) {
             navigate('/dang-nhap');
@@ -27,31 +25,45 @@ function Cart() {
     });
 
     //lấy danh sách giỏ hàng của user
-    listCarts = [];
+    userCarts = [];
     for (let i = 0; i < carts?.length; i++) {
         if (carts[i].userId === user?._id) {
-            listCarts.push(carts[i]);
+            userCarts.push(carts[i]);
         }
     }
 
-    const handleNumber = (value) => {
-        let newcount;
-        if (value === '+') {
-            if (count < 99) {
-                newcount = count + 1;
-                setCount(newcount);
+    const [listCarts, setListCarts] = useState(userCarts); //danh sách giỏ hàng sau khi update số lượng
+    const handleNumber = (id, math) => {
+        const updateCount = listCarts.map((item) => {
+            if (item._id === id) {
+                if (math === '+') {
+                    if (item.count < 99) {
+                        let count = item.count + 1;
+                        let productTotal = count * item.price;
+                        return { ...item, count: count, productTotal: productTotal };
+                    }
+                } else {
+                    if (item.count > 1) {
+                        let count = item.count - 1;
+                        let productTotal = count * item.price;
+                        return { ...item, count: count, productTotal: productTotal };
+                    }
+                }
             }
-        } else {
-            if (count > 1) {
-                newcount = count - 1;
-                setCount(newcount);
-            }
-        }
+            return item;
+        });
+        setListCarts(updateCount);
     };
 
     //xóa sản phẩm khỏi giỏ hàng
     const handleDeleteProduct = (id) => {
         deleteCarts(dispatch, id, axiosJWT);
+    };
+
+    //Chuyển đến trang thanh toán
+    const handlePayment = () => {
+        updateCarts(dispatch, listCarts, axiosJWT);
+        navigate('/gio-hang/thanh-toan');
     };
 
     return (
@@ -93,16 +105,11 @@ function Cart() {
                                             </span>
                                         </td>
                                         <td className="quantity">
-                                            <div className="minus" onClick={() => handleNumber('-')}>
+                                            <div className="minus" onClick={() => handleNumber(item._id, '-')}>
                                                 -
                                             </div>
-                                            <input
-                                                type="number"
-                                                value={item.count}
-                                                onChange={(e) => setCount(e.target.value)}
-                                                readOnly={false} //không cho nhập
-                                            />
-                                            <div className="plus" onClick={() => handleNumber('+')}>
+                                            <input type="number" value={item.count} readOnly />
+                                            <div className="plus" onClick={() => handleNumber(item._id, '+')}>
                                                 +
                                             </div>
                                         </td>
@@ -126,7 +133,7 @@ function Cart() {
                     </tbody>
                 </table>
                 <div className="wrapper-btn">
-                    <Link to="/gio-hang/thanh-toan">Thanh toán</Link>
+                    <button onClick={handlePayment}>Thanh toán</button>
                 </div>
                 <div className="wrapper-description">Giao hàng sớm nhất từ 3 đến 5 ngày</div>
             </div>

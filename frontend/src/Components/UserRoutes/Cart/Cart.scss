@@ -59,6 +59,7 @@
                         height: 13rem;
 
                         img {
+                            max-width: 140px;
                             width: 100%;
                             background-size: cover;
                             background-repeat: no-repeat;
@@ -100,8 +101,6 @@
                     .quantity {
                         display: flex;
                         justify-content: center;
-                        cursor: no-drop; //không cho nhập
-                        opacity: 0.5; //không cho nhập
 
                         .plus,
                         .minus {
@@ -111,6 +110,7 @@
                             font-size: 2rem;
                             background: var(--text-green);
                             color: var(--text-white-color);
+                            cursor: pointer;
                         }
 
                         input {
@@ -121,7 +121,6 @@
                             width: 5rem;
                             outline: none;
                             border: 0.1rem solid var(--text-green);
-                            cursor: no-drop; //không cho nhập
                         }
 
                         /* Chrome, Safari, Edge, Opera */
@@ -151,7 +150,7 @@
             display: flex;
             justify-content: flex-end;
 
-            a {
+            button {
                 padding: 0.8rem 2rem;
                 font-size: 1.6rem;
                 font-weight: 600;
@@ -162,7 +161,7 @@
                 border-radius: 0.4rem;
             }
 
-            a:hover {
+            button:hover {
                 cursor: pointer;
                 opacity: 0.8;
             }

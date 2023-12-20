@@ -21,7 +21,6 @@ function EditUser() {
     const [newEmail, setNewEmail] = useState(user.email);
     const [newPhone, setNewPhone] = useState(user.phone);
     const [newAddress, setNewAddress] = useState(user.address);
-    const [newUsername, setNewUsername] = useState(user.username);
     const [newPassword, setNewPassword] = useState('**********');
 
     const handleShowPassword = () => {
@@ -56,30 +55,25 @@ function EditUser() {
         email: newEmail,
         phone: newPhone,
         address: newAddress,
-        username: newUsername,
         password: newPassword,
     };
 
     const handleUpdateUser = () => {
-        if (
-            newfullname === '' &&
-            newEmail === '' &&
-            newPhone === '' &&
-            newAddress === '' &&
-            newUsername === '' &&
-            newPassword === ''
-        ) {
+        // Kiểm tra định dạng email
+        const isValidEmail = /\S+@\S+\.\S+/;
+
+        if (newfullname === '' && newEmail === '' && newPhone === '' && newAddress === '' && newPassword === '') {
             alert('Lỗi: Không được để trống thông tin');
         } else if (newfullname.length < 5) {
             alert('Lỗi: Độ tên phải từ 5 - 30 ký tự');
+        } else if (!isValidEmail.test(newEmail)) {
+            alert('Lỗi: Email không đúng định dạng');
         } else if (newEmail.length < 10) {
             alert('Lỗi: Độ dài email từ 10 - 40 ký tự');
-        } else if (newPhone.length < 10 || newPhone.length > 12) {
+        } else if (newPhone < 0 || newPhone.length < 10 || newPhone.length > 12) {
             alert('Lỗi: số điện thoại không hợp lệ');
-        } else if (newAddress.length < 5) {
+        } else if (newAddress.length < 1) {
             alert('Lỗi: Độ dài địa phải từ 5 - 40 ký tự');
-        } else if (newUsername < 7) {
-            alert('Lỗi: Độ dài tài khoản từ 7 - 40 ký tự');
         } else if (newPassword < 7) {
             alert('Lỗi: Độ dài mật khẩu từ 7 - 40 ký tự');
         } else {
@@ -100,7 +94,7 @@ function EditUser() {
                     <div className="edituser-right-info">
                         <div className="edituser-right-info-left">
                             <div className="edituser-right-info-left-item">
-                                <p>Tên đăng nhập </p>
+                                <p>Họ và tên </p>
                                 <input
                                     type="text"
                                     value={newfullname}
@@ -137,16 +131,6 @@ function EditUser() {
                                     maxLength="40"
                                     onChange={(e) => setNewAddress(e.target.value)}
                                     disabled
-                                />
-                            </div>
-                            <div className="edituser-right-info-left-item">
-                                <p>Tài khoản</p>
-                                <input
-                                    type="text"
-                                    value={newUsername}
-                                    maxLength="40"
-                                    disabled
-                                    onChange={(e) => setNewUsername(e.target.value)}
                                 />
                             </div>
                             <div className="edituser-right-info-left-item">

@@ -12,6 +12,13 @@ import Payment from '../Components/UserRoutes/Payment/Payment';
 import Order from '../Components/UserRoutes/Order/Order';
 import EditUser from '../Components/UserRoutes/EditUser/EditUser';
 import OrdersNotification from '../Components/UserRoutes/OrdersNotification/OrdersNotification';
+import ListOrders from '../Components/AdminRoutes/ListOrders/ListOrders';
+import ListReports from '../Components/AdminRoutes/ListReports/ListReports';
+import ListComments from '../Components/AdminRoutes/ListComments/ListComments';
+import News from '../Components/UserRoutes/News/News';
+import Introduce from '../Components/UserRoutes/Introduce/Introduce';
+import Support from '../Components/UserRoutes/Support/Support';
+import Recruitment from '../Components/UserRoutes/Recruitment/Recruitment';
 
 //public route chưa login
 const publicRoutes = [
@@ -20,6 +27,10 @@ const publicRoutes = [
     { path: '/dang-ky', component: Register },
     { path: '/san-pham/thong-tin-chi-tiet', component: Product },
     { path: '/danh-sach-san-pham', component: Search },
+    { path: '/tin-tuc', component: News },
+    { path: '/gioi-thieu', component: Introduce },
+    { path: '/ho-tro', component: Support },
+    { path: '/tuyen-dung', component: Recruitment },
 ];
 
 //private routes đã login
@@ -27,6 +38,9 @@ const privateRoutes = [
     { path: '/admin', component: Admin },
     { path: '/quan-li-nguoi-dung', component: ListUsers },
     { path: '/quan-li-san-pham', component: ListProducts },
+    { path: '/quan-li-don-hang', component: ListOrders },
+    { path: '/quan-li-thong-ke', component: ListReports },
+    { path: '/quan-li-danh-gia-binh-luan', component: ListComments },
     { path: '/tai-khoan', component: User },
     { path: '/tai-khoan/tai-khoan-cua-toi', component: EditUser },
     { path: '/tai-khoan/don-hang', component: Order },

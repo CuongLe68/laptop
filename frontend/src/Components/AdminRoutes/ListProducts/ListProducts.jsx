@@ -24,10 +24,10 @@ function ListProducts() {
     const [newName, setNewName] = useState('');
     const [newAvatar, setNewAvatar] = useState('');
     const [newDescription, setNewDescription] = useState('');
-    const [newNumber, setNewNumber] = useState('');
-    const [newPrice, setNewPrice] = useState('');
-    const [newCost, setNewCost] = useState('');
-    const [newPercent, setNewPercent] = useState('');
+    const [newNumber, setNewNumber] = useState(0);
+    const [newPrice, setNewPrice] = useState(0);
+    const [newCost, setNewCost] = useState(0);
+    const [newPercent, setNewPercent] = useState(0);
     const [newCpu, setNewCpu] = useState('');
     const [newHardrive, setNewHardrive] = useState('');
     const [newMuxSwitch, setNewMuxSwitch] = useState('');
@@ -80,10 +80,10 @@ function ListProducts() {
         setNewName('');
         setNewAvatar('');
         setNewDescription('');
-        setNewNumber('');
-        setNewPrice('');
-        setNewCost('');
-        setNewPercent('');
+        setNewNumber(0);
+        setNewPrice(0);
+        setNewCost(0);
+        setNewPercent(0);
         setNewCpu('');
         setNewHardrive('');
         setNewMuxSwitch('');
@@ -125,6 +125,7 @@ function ListProducts() {
         if (
             newName.length < 1 ||
             newDescription.length < 1 ||
+            newAvatar.length < 1 ||
             newNumber.length < 1 ||
             newPrice.length < 1 ||
             newCost.length < 1 ||
@@ -140,12 +141,25 @@ function ListProducts() {
             newOperetingSystem.length < 1
         ) {
             alert('Không được để trống thông tin');
+        } else if (newPrice < 0) {
+            alert('Giá ưu đãi không hợp lệ');
+            setNewPrice(0);
+        } else if (newCost < 0) {
+            alert('Giá gốc không hợp lệ');
+            setNewCost(0);
+        } else if (newNumber < 0) {
+            alert('Số lượng không hợp lệ');
+            setNewNumber(0);
+        } else if (newPercent < 0) {
+            alert('Phần trăm giảm không hợp lệ');
+            setNewPercent(0);
         } else {
             if (value === 'Thêm') {
+                console.log(newProduct);
                 //Tạo sản phẩm mới
                 createProduct(dispatch, newProduct);
             } else if (value === 'Lưu') {
-                //Chỉnh sửa thông tin người dùng
+                //Chỉnh sửa thông tin sản phẩm
                 updateProduct(user.accessToken, newProduct, currentId, axiosJWT, dispatch);
             }
         }
@@ -186,23 +200,20 @@ function ListProducts() {
                                     onChange={(e) => setNewDescription(e.target.value)}
                                 />
                             </div>
-                            {currentBtn === 'Thêm' ? (
-                                <div className="wrapper-item">
-                                    <span>Ảnh</span>
-                                    <input
-                                        type="text"
-                                        placeholder="Link ảnh mô tả"
-                                        value={newAvatar}
-                                        onChange={(e) => setNewAvatar(e.target.value)}
-                                    />
-                                </div>
-                            ) : (
-                                ''
-                            )}
+                            <div className="wrapper-item">
+                                <span>Ảnh</span>
+                                <input
+                                    type="text"
+                                    placeholder="Link ảnh mô tả"
+                                    value={newAvatar}
+                                    onChange={(e) => setNewAvatar(e.target.value)}
+                                />
+                            </div>
                             <div className="wrapper-item">
                                 <span>Giá ưu đãi</span>
                                 <input
                                     type="number"
+                                    min={0}
                                     placeholder="Giá ưu đãi"
                                     value={newPrice}
                                     onChange={(e) => setNewPrice(e.target.value)}
@@ -212,6 +223,7 @@ function ListProducts() {
                                 <span>Giá gốc</span>
                                 <input
                                     type="number"
+                                    min={0}
                                     placeholder="Giá gốc"
                                     value={newCost}
                                     onChange={(e) => setNewCost(e.target.value)}
@@ -221,6 +233,7 @@ function ListProducts() {
                                 <span>Số lượng</span>
                                 <input
                                     type="number"
+                                    min={0}
                                     placeholder="Số lượng"
                                     value={newNumber}
                                     onChange={(e) => setNewNumber(e.target.value)}
@@ -230,6 +243,7 @@ function ListProducts() {
                                 <span>Giảm</span>
                                 <input
                                     type="number"
+                                    min={0}
                                     placeholder="Phần trăm giảm"
                                     value={newPercent}
                                     onChange={(e) => setNewPercent(e.target.value)}

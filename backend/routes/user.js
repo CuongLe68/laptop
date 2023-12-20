@@ -27,7 +27,7 @@ route.put('/update-product/:id', userControllers.updateProduct);
 //add product to cart
 route.post('/add-to-cart', userControllers.createCart);
 
-//add product to cart
+//get product to cart
 route.get('/get-all-cart', userControllers.getAllCarts);
 
 //delete product from carts
@@ -38,5 +38,23 @@ route.post('/create-order', userControllers.createNewOrder);
 
 //get all order
 route.get('/all-orders', userControllers.getAllOders);
+
+//update order
+route.put('/update-order/:id', userControllers.updateOrders);
+
+//delete order
+route.delete('/delete-order/:id', userControllers.deleteOrder);
+
+//create comment
+route.post('/create-comment', userControllers.createComment);
+
+//get all comment
+route.get('/get-all-comment', userControllers.getAllComment);
+
+//update comment
+route.put('/update-comment/:id', userControllers.updateComment);
+
+//delete comment
+route.delete('/delete-comment/:id', userControllers.deleteComment);
 
 module.exports = route;

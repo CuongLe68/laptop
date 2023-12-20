@@ -32,11 +32,16 @@ const Admin = () => {
                 <Link to="/quan-li-nguoi-dung" className="admin-container-item">
                     Quản lý người dùng
                 </Link>
-                <div className="admin-container-item">Quản lý đơn hàng</div>
-                <div className="admin-container-item">Quản lý đánh giá bình luận</div>
+                <Link to="/quan-li-don-hang" className="admin-container-item">
+                    Quản lý đơn hàng
+                </Link>
+                <Link to="/quan-li-thong-ke" className="admin-container-item">
+                    Quản lý thống kê
+                </Link>
+                <Link to="/quan-li-danh-gia-binh-luan" className="admin-container-item">
+                    Quản lý đánh giá bình luận
+                </Link>
                 <div className="admin-container-item">Quản lý tin tức</div>
-                <div className="admin-container-item">Quản lý thanh toán</div>
-                <div className="admin-container-item">Quản lý thống kê</div>
                 <Link to="/" onClick={handleLogout} className="admin-container-item">
                     Đăng xuất
                 </Link>
