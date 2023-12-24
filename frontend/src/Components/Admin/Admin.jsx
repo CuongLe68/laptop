@@ -41,7 +41,9 @@ const Admin = () => {
                 <Link to="/quan-li-danh-gia-binh-luan" className="admin-container-item">
                     Quản lý đánh giá bình luận
                 </Link>
-                <div className="admin-container-item">Quản lý tin tức</div>
+                <Link to="/quan-li-tin-tuc" className="admin-container-item">
+                    Quản lý tin tức
+                </Link>
                 <Link to="/" onClick={handleLogout} className="admin-container-item">
                     Đăng xuất
                 </Link>

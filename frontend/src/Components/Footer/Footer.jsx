@@ -35,9 +35,9 @@ function Footer() {
             <div className="footer-section">
                 <div className="footer-item">
                     <h3>Giới thiệu</h3>
-                    <Link to="/">Giới Thiệu Về MouseStore Việt Nam</Link>
-                    <Link to="/">Tuyển Dụng</Link>
-                    <Link to="/">Điều Khoản MouseStore</Link>
+                    <Link to="/gioi-thieu">Giới Thiệu Về MouseStore Việt Nam</Link>
+                    <Link to="/tuyen-dung">Tuyển Dụng</Link>
+                    <Link to="/ho-tro">Điều Khoản MouseStore</Link>
                 </div>
                 <div className="footer-item">
                     <h3>Liên hệ</h3>
@@ -47,9 +47,7 @@ function Footer() {
                 </div>
                 <div className="footer-item">
                     <h3>Laptop MouseStore</h3>
-                    <span>Cơ sở 1: 333 Hai Bà Trưng – Hà Nội</span>
-                    <span>Cơ sở 2: 666 Quang Trung – Đà Nẵng</span>
-                    <span>Cơ sở 3: 999 Hàm Nghi – TPHCM</span>
+                    <span>Địa chỉ: 666 Quang Trung – Đà Nẵng</span>
                 </div>
             </div>
         </footer>

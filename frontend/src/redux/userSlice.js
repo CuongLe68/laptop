@@ -10,7 +10,9 @@ const userSlice = createSlice({
             allListOrders: null,
             currentProduct: null,
             searchResults: null,
-            allComments: 123,
+            allComments: null,
+            allNews: null,
+            currentNews: null,
             isFetching: false,
             error: false,
         },
@@ -250,6 +252,76 @@ const userSlice = createSlice({
             state.users.isFetching = false;
             state.users.error = true;
         },
+
+        //Lấy tất cả bài viết
+        getAllNewsStart: (state) => {
+            state.users.isFetching = true;
+        },
+        getAllNewsSuccess: (state, action) => {
+            state.users.isFetching = false;
+            state.users.allNews = action.payload;
+            state.users.error = false;
+        },
+        getAllNewsFailed: (state) => {
+            state.users.isFetching = false;
+            state.users.error = true;
+        },
+
+        //cập nhật bài viết
+        updateNewStart: (state) => {
+            state.users.isFetching = true;
+        },
+        updateNewSuccess: (state, action) => {
+            state.users.isFetching = false;
+            state.users.allNews = action.payload;
+            state.users.error = false;
+        },
+        updateNewFailed: (state) => {
+            state.users.isFetching = false;
+            state.users.error = true;
+        },
+
+        //Lấy thông tin của bài viết hiện tại
+        getInfoNewStart: (state) => {
+            state.users.isFetching = true;
+        },
+        getInfoNewSuccess: (state, action) => {
+            state.users.isFetching = false;
+            state.users.currentNews = action.payload;
+            state.users.error = false;
+        },
+        getInfoNewFailed: (state) => {
+            state.users.isFetching = false;
+            state.users.error = true;
+        },
+
+        //create new
+        createNewStart: (state) => {
+            state.users.isFetching = true;
+        },
+        createNewSuccess: (state, acction) => {
+            state.users.isFetching = false;
+            state.users.allNews = acction.payload;
+            state.users.error = false;
+        },
+        createNewFailed: (state) => {
+            state.users.isFetching = false;
+            state.users.error = true;
+        },
+
+        //delete new
+        deleteNewStart: (state) => {
+            state.users.isFetching = true;
+        },
+        deleteNewSuccess: (state, action) => {
+            state.users.isFetching = false;
+            state.users.allNews = action.payload;
+            state.users.error = false;
+        },
+        deleteNewFailed: (state) => {
+            state.users.isFetching = false;
+            state.users.error = true;
+        },
     },
 });
 
@@ -321,6 +393,26 @@ export const {
     deleteCommentStart,
     deleteCommentSuccess,
     deleteCommentFailed,
+
+    getInfoNewStart,
+    getInfoNewSuccess,
+    getInfoNewFailed,
+
+    getAllNewsStart,
+    getAllNewsSuccess,
+    getAllNewsSFailed,
+
+    updateNewStart,
+    updateNewSuccess,
+    updateNewFailed,
+
+    createNewStart,
+    createNewSuccess,
+    createNewFailed,
+
+    deleteNewStart,
+    deleteNewSuccess,
+    deleteNewFailed,
 } = userSlice.actions;
 
 export default userSlice.reducer;

@@ -19,6 +19,8 @@ import News from '../Components/UserRoutes/News/News';
 import Introduce from '../Components/UserRoutes/Introduce/Introduce';
 import Support from '../Components/UserRoutes/Support/Support';
 import Recruitment from '../Components/UserRoutes/Recruitment/Recruitment';
+import NewsDetail from '../Components/UserRoutes/NewsDetail/NewsDetail';
+import ListNews from '../Components/AdminRoutes/ListNews/ListNews';
 
 //public route chưa login
 const publicRoutes = [
@@ -28,6 +30,7 @@ const publicRoutes = [
     { path: '/san-pham/thong-tin-chi-tiet', component: Product },
     { path: '/danh-sach-san-pham', component: Search },
     { path: '/tin-tuc', component: News },
+    { path: '/tin-tuc/chi-tiet-bai-viet', component: NewsDetail },
     { path: '/gioi-thieu', component: Introduce },
     { path: '/ho-tro', component: Support },
     { path: '/tuyen-dung', component: Recruitment },
@@ -47,6 +50,7 @@ const privateRoutes = [
     { path: '/tai-khoan/thong-bao', component: OrdersNotification },
     { path: '/gio-hang', component: Cart },
     { path: '/gio-hang/thanh-toan', component: Payment },
+    { path: '/quan-li-tin-tuc', component: ListNews },
 ];
 
 export { publicRoutes, privateRoutes };

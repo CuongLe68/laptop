@@ -3,6 +3,7 @@ const Product = require('../models/Product');
 const Cart = require('../models/Cart');
 const Orders = require('../models/Orders');
 const Comments = require('../models/Comments');
+const News = require('../models/News');
 
 const userControllers = {
     //get all users admin
@@ -268,6 +269,64 @@ const userControllers = {
             res.status(200).json(listComments);
         } catch (error) {
             res.status(500).json('Xoá bình luận thất bại');
+        }
+    },
+
+    //create news
+    createNews: async (req, res) => {
+        try {
+            const newNews = await new News({
+                author: req.body.author,
+                category: req.body.category,
+                title: req.body.title,
+                titlePhoto: req.body.titlePhoto,
+                eyes: req.body.eyes,
+                subTitle: req.body.subTitle,
+                content: req.body.content,
+                dateCreate: req.body.dateCreate,
+                dateUpdate: req.body.dateUpdate,
+            });
+
+            await newNews.save();
+            const allNews = await News.find();
+
+            res.status(200).json(allNews);
+        } catch (error) {
+            res.status(500).json('Tạo bài viết thất bại');
+        }
+    },
+
+    //get All news
+    getAllNews: async (req, res) => {
+        try {
+            const allNews = await News.find();
+            res.status(200).json(allNews);
+        } catch (error) {
+            res.status(500).json('Lấy bài viết thất bại');
+        }
+    },
+
+    //update News
+    updateNew: async (req, res) => {
+        try {
+            await News.findByIdAndUpdate(req.params.id, req.body.body);
+
+            const listNews = await News.find();
+            res.status(200).json(listNews);
+        } catch (error) {
+            res.status(500).json('Cập nhật bài viết thất bại');
+        }
+    },
+
+    //delete new
+    deleteNew: async (req, res) => {
+        try {
+            await News.findByIdAndDelete(req.params.id);
+
+            const listNews = await News.find();
+            res.status(200).json(listNews);
+        } catch (error) {
+            res.status(500).json('Xóa bài viết thất bại');
         }
     },
 };

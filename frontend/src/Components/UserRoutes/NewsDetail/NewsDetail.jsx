@@ -1,4 +1,4 @@
-import './News.scss';
+import './NewsDetail.scss';
 import { useNavigate } from 'react-router-dom';
 import NavBar from '../../NavBar/NavBar';
 import Footer from '../../Footer/Footer';
@@ -7,26 +7,27 @@ import { useEffect, useState } from 'react';
 import { createAxios } from '../../../createInstance';
 import { loginSuccess } from '../../../redux/authSlice';
 import { Link } from 'react-router-dom';
-import { getAllNews, getInfoCurrentNew } from '../../../redux/apiRequest';
+import { getInfoCurrentNew, updateNew } from '../../../redux/apiRequest';
 import moment from 'moment';
 
-function News() {
-    const user = useSelector((state) => state.auth.login.currentUser);
+function NewsDetail() {
+    const currentNew = useSelector((state) => state.users.users?.currentNews);
     const listNews = useSelector((state) => state.users.users?.allNews);
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const axiosJWT = createAxios(user, dispatch, loginSuccess);
-
-    useEffect(() => {
-        getAllNews(dispatch, axiosJWT);
-        // eslint-disable-next-line
-    }, []);
 
     //Lấy bài viết hiện tại
     const getCurrentNew = (currentNew) => {
         getInfoCurrentNew(dispatch, navigate, currentNew);
     };
+
+    useEffect(() => {
+        const deltailNew = document.querySelector('.news-detail-left .item');
+        deltailNew.innerHTML = currentNew.content;
+
+        updateNew(currentNew._id, { eyes: currentNew.eyes + 1 }, dispatch);
+    }, [currentNew]);
 
     // reFormatdate YYYY-MM-DD
     function reFormatDate(date) {
@@ -36,14 +37,26 @@ function News() {
     }
 
     return (
-        <div className="news-container">
+        <div className="news-detail-container">
             <NavBar />
-            <div className="news-wrapper">
-                <div className="news-left">
-                    <h3 className="page-title">Tin tức</h3>
+            <div className="news-detail-wrapper">
+                <div className="news-detail-left">
+                    <h3 className="page-title">{currentNew.title}</h3>
+                    <div className="time-author-views">
+                        <div className="time">Ngày đăng: {reFormatDate(currentNew.dateCreate)}</div>
+                        <div className="author">Tác giả: {currentNew.author}</div>
+                        <div className="views">{currentNew.eyes} lượt xem</div>
+                    </div>
+                    <h4 className="sub-title">{currentNew.subTitle}</h4>
+                    <div className="content">
+                        <div className="item"></div>
+                    </div>
+                </div>
+                <div className="news-detail-right">
+                    <h3 className="page-title">Các bài viết khác</h3>
                     {listNews?.map((item) => {
                         return (
-                            <div className="item" onClick={(e) => getCurrentNew(item)}>
+                            <div className="item" onClick={(e) => getCurrentNew(item)} key={item._id}>
                                 <img className="title-photo" src={item.titlePhoto} alt="" />
                                 <div className="content">
                                     <h3 className="title">{item.title}</h3>
@@ -51,21 +64,8 @@ function News() {
                                         <div className="time">{reFormatDate(item.dateCreate)}</div>
                                         <div className="views">{item.eyes} lượt xem</div>
                                     </div>
-                                    <p className="sub-title">{item.subTitle}</p>
                                 </div>
                             </div>
-                        );
-                    })}
-                </div>
-                <div className="news-right">
-                    <h3 className="page-title">Khuyến mãi</h3>
-                    {listNews?.map((item) => {
-                        return item.category === 'promotion' ? (
-                            <div className="item" onClick={(e) => getCurrentNew(item)}>
-                                <img className="title-photo" src={item.titlePhoto} alt="" />
-                            </div>
-                        ) : (
-                            ''
                         );
                     })}
                 </div>
@@ -75,4 +75,4 @@ function News() {
     );
 }
 
-export default News;
+export default NewsDetail;

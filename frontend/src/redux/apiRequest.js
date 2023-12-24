@@ -77,6 +77,21 @@ import {
     deleteCommentStart,
     deleteCommentSuccess,
     deleteCommentFailed,
+    getInfoNewStart,
+    getInfoNewSuccess,
+    getInfoNewFailed,
+    getAllNewsStart,
+    getAllNewsSuccess,
+    getAllNewsSFailed,
+    updateNewStart,
+    updateNewSuccess,
+    updateNewFailed,
+    createNewStart,
+    createNewSuccess,
+    createNewFailed,
+    deleteNewStart,
+    deleteNewSuccess,
+    deleteNewFailed,
 } from './userSlice';
 
 const proxy = 'http://localhost:8000/v1';
@@ -409,5 +424,65 @@ export const deleteComment = async (id, dispatch, axiosJWT) => {
         alert('Xóa bình luận thành công');
     } catch (error) {
         dispatch(deleteCommentFailed());
+    }
+};
+
+//get all news
+export const getAllNews = async (dispatch, axiosJWT) => {
+    dispatch(getAllNewsStart());
+    try {
+        const res = await axiosJWT.get('http://localhost:8000/v1/user/get-all-news');
+        dispatch(getAllNewsSuccess(res.data));
+    } catch (error) {
+        dispatch(getAllNewsSFailed());
+    }
+};
+
+//Update new
+export const updateNew = async (id, currentNew, dispatch) => {
+    dispatch(updateNewStart());
+    try {
+        console.log(id, currentNew);
+        const res = await axios.put(`http://localhost:8000/v1/user/update-new/` + id, {
+            body: currentNew,
+        });
+        dispatch(updateNewSuccess(res.data));
+    } catch (error) {
+        dispatch(updateNewFailed());
+    }
+};
+
+//get new information from frontend
+export const getInfoCurrentNew = async (dispatch, navigate, currentNew) => {
+    dispatch(getInfoNewStart());
+    try {
+        dispatch(getInfoNewSuccess(currentNew));
+        navigate('/tin-tuc/chi-tiet-bai-viet');
+    } catch (error) {
+        dispatch(getInfoNewFailed());
+    }
+};
+
+//Create New
+export const createNew = async (newNew, dispatch) => {
+    dispatch(createNewStart());
+    try {
+        const res = await axios.post('http://localhost:8000/v1/user/create-new', newNew);
+        dispatch(createNewSuccess(res.data));
+        alert('Tạo bài viết mới thành công');
+    } catch (error) {
+        dispatch(createNewFailed());
+    }
+};
+
+//delete new
+export const deleteNew = async (id, dispatch) => {
+    dispatch(deleteNewStart());
+    try {
+        const res = await axios.delete(`${proxy}/user/delete-new/` + id);
+        dispatch(deleteNewSuccess(res.data));
+        alert('Xóa bài viết thành công thành công');
+    } catch (error) {
+        dispatch(deleteNewFailed());
     }
 };

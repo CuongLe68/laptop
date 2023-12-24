@@ -57,4 +57,15 @@ route.put('/update-comment/:id', userControllers.updateComment);
 //delete comment
 route.delete('/delete-comment/:id', userControllers.deleteComment);
 
+//create new
+route.post('/create-new', userControllers.createNews);
+
+//get all news
+route.get('/get-all-news', userControllers.getAllNews);
+
+//update new
+route.put('/update-new/:id', userControllers.updateNew);
+
+//delete new
+route.delete('/delete-new/:id', userControllers.deleteNew);
 module.exports = route;
